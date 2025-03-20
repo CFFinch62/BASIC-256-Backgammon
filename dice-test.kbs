@@ -1,0 +1,15 @@
+include "roll_dice.kbs"
+
+call init_board()
+for i = 1 to 50
+	call roll(5,5,5,green)
+next i
+end
+
+# Set board size and draw background
+subroutine init_board()
+	graphsize 215,55
+	clg
+	color darkgreen
+	rect 0,0,205,45
+end subroutine

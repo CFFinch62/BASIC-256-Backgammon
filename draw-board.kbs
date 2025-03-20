@@ -1,0 +1,257 @@
+include "bgdata.kbs"
+
+# Set board size and draw background
+subroutine init_board()
+	graphsize 640,480
+	clg
+	color darkgreen
+	rect 0,0,640,480
+end subroutine
+
+# Draw board border
+subroutine draw_border()
+	color black
+	penwidth 20
+	line 0,0,640,0
+	line 640,0,640,480
+	line 0,480,640,480
+	line 0,0,0,480
+end subroutine
+
+# Draw bar
+subroutine draw_bar()
+	line 290,0,290,480
+	penwidth 2
+	color white
+	line 290,20,290,460
+	color black
+end subroutine
+
+#  Draw parking lot
+subroutine draw_lot()
+	penwidth 10
+	line 570,0,570,480
+	line 580,195,640,195
+	line 580,285,640,285
+end subroutine
+
+# Draw a single point
+subroutine draw_point()
+	color darkgreen
+	poly  point13_bg
+	color black
+	poly point13
+end subroutine
+
+# Draw all points
+subroutine draw_points()
+	color black
+	penwidth 5
+	# upper black points
+	poly point13
+	poly point15
+	poly point17
+	poly point19
+	poly point21
+	poly point23
+	# lower black points
+	poly point11
+	poly point9
+	poly point7
+	poly point5
+	poly point3
+	poly point1
+	# upper white points
+	poly point14
+	poly point16
+	poly point18
+	poly point20
+	poly point22
+	poly point24
+	# lower white points
+	poly point12
+	poly point10
+	poly point8
+	poly point6
+	poly point4
+	poly point2
+end subroutine
+
+# Draw point numbers
+subroutine label_points()
+	color white
+	font "Tahoma",6,75
+	nx = 318
+	cnt = 6
+	while cnt > 0
+		text nx, 470, string(cnt)
+		nx = nx + 44
+		cnt = cnt - 1
+	end while
+	nx = 28
+	cnt = 12
+	while cnt > 6
+		text nx, 470, string(cnt)
+		nx = nx + 44
+		cnt = cnt - 1
+	end while
+	nx = 28
+	cnt = 13
+	while cnt < 19
+		text nx, 0, string(cnt)
+		nx = nx + 44
+		cnt = cnt + 1
+	end while
+	nx = 318
+	cnt = 19
+	while cnt < 25
+		text nx, 0, string(cnt)
+		nx = nx + 44
+		cnt = cnt + 1
+	end while
+end subroutine
+
+# Draw a single checker
+subroutine draw_checker(c, x, y)
+	old_penwidth = GetPenWidth
+	old_color = GetColor
+	penwidth 2
+	if c > 0 then
+		color black, gray
+	else
+		color black, white
+	end if
+	circle x,y,15
+	circle x,y,10
+	penwidth old_penwidth
+	color old_color
+end subroutine
+
+#  Label last checker with number of checkers above 5 on point
+subroutine num_checkers(p, n)
+	color black
+	font "Tahoma",10,75
+	text 29, 172, "7"
+end subroutine
+
+# Draw initial checker plaement
+subroutine setup_checkers()
+	# Black Outer Board
+	for i  = 30 to 150 step 30
+		call draw_checker(0,33, i)
+	next
+	for i  = 30 to 90 step 30
+		call draw_checker(1,209, i)
+	next
+	# Black Inner Board
+	for i  = 30 to 150 step 30
+		call draw_checker(1,323, i)
+	next
+	for i  = 30 to 60 step 30
+		call draw_checker(0,543, i)
+	next
+	# White Outer Board
+	for i  = 450 to 330 step -30
+		call draw_checker(1,33, i)
+	next
+		for i  = 450 to 390 step -30
+		call draw_checker(0,209, i)
+	next
+	# White Inner Board
+	for i  = 450 to 330 step -30
+		call draw_checker(0,323, i)
+	next
+	for i  = 450 to 420 step -30
+		call draw_checker(1,543, i)
+	next
+end subroutine
+
+# Update score info
+subroutine update_score(w, g, m)
+	font "Tahoma",16,75
+	color black
+	text 190, 200, "MATCH"
+	text 310, 200, "SCORE"
+	font "Tahoma",20,75
+	color black
+	text 210, 230, string(m)
+	color gray
+	if g < 9 then
+		text 310, 230, "0" + string(g)
+	else
+		text 310, 230, string(g)
+	end if		
+	color black
+	text 347, 230, ":"
+	color white
+		if w < 9 then
+		text 360, 230, "0" + string(w)
+	else
+		text 360, 230, string(w)
+	end if
+end subroutine
+
+subroutine erase_score()
+	color darkgreen
+	poly  match_bg
+	poly  score_bg
+end subroutine
+
+subroutine update_pips(w, g)
+	font "Tahoma",16,75
+	color gray
+	text 582,200, string(w)
+	color white
+	text 582,255, string(g)
+end subroutine
+
+subroutine draw_cube(n, hue)
+	color darkorange
+	penwidth 30
+	line 598,240,606,240
+	color hue
+	font "Tahoma",20,75
+	text 593,223, string(n)
+	penwidth 5
+end subroutine
+
+subroutine park_checkers()
+	penwidth 10
+	for i = 20 to 180 step 12
+		color darkgrey
+		line 586,i,620,i
+		color white
+		line 586,(i+280),620,(i+280)
+	next i
+end subroutine
+
+# Draw dice parked
+subroutine park_dice()
+	color darkgray
+	penwidth 20
+	line 586,212,590,212
+	line 614,212,618,212
+	color black
+	font "Tahoma",8,75
+	text 577,197," . . ."
+	text 606,197," . . ."
+	text 577,207," . . ."
+	text 606,207," . . ."
+	color white
+	line 586,268,590,268
+	line 614,268,618,268
+	color black
+	text 576,252," . . ."
+	text 606,252," . . ."
+	text 577,262," . . ."
+	text 606,262," . . ."
+end subroutine
+
+subroutine clear_dice()
+	color darkgreen
+	poly  p1_dice_bg
+	poly p2_dice_bg
+end subroutine
+
+
+

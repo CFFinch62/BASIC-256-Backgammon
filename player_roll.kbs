@@ -1,0 +1,49 @@
+function player_roll(player, n)
+	dim dice(n)
+	begin case 
+		case player = 0
+			c = white
+			x = 390
+		case player = 1
+			c = gray
+			x = 100
+	end case
+	dice = roll_dice(n)
+	for r = 1 to 25
+		for die = 1 to n
+			call draw_die(x,220, dice[die-1], c)
+			x = x + 50
+		next die
+		x =  x - (50 * n)
+	next r
+	return dice 	
+end  function
+
+function roll_dice(n)
+    dim dice(n)
+    for i = 1 to n 
+    	dice[i-1] = int(rand * 6) + 1
+	next i    
+    return dice
+end function
+
+subroutine draw_die(x,y,n,c)
+	# draw 35x35 with dots 5x5 pixels
+	# set x,y for top left
+	# set n for number of dots
+	# set c as die color
+	color c
+	rect x,y,35,35
+	color black
+	# top row
+	if n <> 1 then rect x + 5, y + 5, 5, 5
+	if n = 6 then rect x + 15, y + 5, 5, 5
+	if n >= 4 and n <= 6 then rect x + 25, y + 5, 5, 5
+	# middle
+	if n = 1 or n = 3 or n = 5 then rect x + 15, y + 15, 5, 5
+	# bottom row
+	if n >= 4 and n <= 6 then rect x + 5, y + 25, 5, 5
+	if n <> 1 then rect x + 25, y + 25, 5, 5
+	if n = 6 then rect x + 15, y + 25, 5, 5
+end subroutine
+

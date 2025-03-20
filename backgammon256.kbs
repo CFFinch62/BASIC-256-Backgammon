@@ -1,0 +1,59 @@
+#####################################################
+# PROGRAM: BACKGAMMON 256
+# AUTHOR: CHUCK FINCH - (c) 2023 ChuckSoft
+# LAST UPDATED - 01/29/2023
+# PURPOSE:  Single Player Backgammon
+#####################################################
+
+include "draw-board.kbs"
+include "gui-tools.kbs"
+include "bgdata.kbs"
+include "player_roll.kbs"
+
+call get_ready()
+pause 1
+alert("Click OK to start new game.")
+
+call start_game()
+alert("Click OK to roll to see who goes first.")
+p1_roll = 	player_roll(0,1)
+p2_roll =	player_roll(1,1)
+while p1_roll[0] = p2_roll[0] 
+	p1_roll = 	player_roll(0,1)
+	p2_roll =	player_roll(1,1)
+end  while	
+If p1_roll[0] > p2_roll[0] then
+	alert("Player 1 goes first!") 
+else
+	alert("Player 2 goes first!") 
+end if
+call clear_dice()
+end
+
+subroutine get_ready()
+	call init_board()
+	call draw_border()
+	call draw_bar()
+	call draw_lot()
+	call draw_cube(2, black)
+	call park_dice()
+	call park_checkers()
+	call draw_points()
+	call label_points()
+end subroutine
+
+subroutine start_game()
+	clg	
+	call init_board()
+	call draw_border()
+	call draw_bar()
+	call draw_lot()
+	call label_points()
+	call draw_points()
+	call setup_checkers()
+	call draw_cube(2, black)	
+	call update_pips(167, 167)
+	call update_score(0, 0, 11)
+	pause 2
+	call erase_score()
+end subroutine
